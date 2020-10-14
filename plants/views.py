@@ -15,7 +15,7 @@ class PlantListView(APIView):
 
 class SinglePlantView(APIView):
   def get(self, _request, pk):
-    plant = Plant.ojbects.get(pk=pk)
+    plant = Plant.objects.get(pk=pk)
     serializer = PlantSerializer(plant)
 
     return Response(serializer.data)
