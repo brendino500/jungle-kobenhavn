@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Plant(models.Model):
+class Plant (models.Model):
   name = models.CharField(max_length=60)
   image = models.CharField(max_length=400)
   price = models.IntegerField()
