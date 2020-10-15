@@ -8,6 +8,11 @@ class Plant (models.Model):
   description = models.CharField(max_length=800)
   potDiameter = models.IntegerField()
   approxHeight = models.IntegerField()
+  customer = models.ForeignKey(
+    'jwt_auth.User',
+    related_name='customer_order',
+    on_delete=models.CASCADE
+  )
   
   def __str__(self):
       return f'{self.name}'
