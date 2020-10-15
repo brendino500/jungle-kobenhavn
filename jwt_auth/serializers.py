@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 
-from basket.serializers import BasketSerializer
+from plants.serializers import PlantSerializer
 
 User = get_user_model()
 
@@ -27,5 +27,5 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PopulatedUserSerializer(UserSerializer):
-    basket = BasketSerializer(many=True)
+    added_plant = PlantSerializer(many=True)
     # comments_made = CommentSerializer(many=True)

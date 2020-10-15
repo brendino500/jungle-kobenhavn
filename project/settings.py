@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'plants',
     'jwt_auth',
-    'basket',
+    'order',
 ]
 
 AUTH_USER_MODEL = 'jwt_auth.User'

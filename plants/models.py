@@ -13,11 +13,6 @@ class Plant (models.Model):
   #   related_name='customer_order',
   #   on_delete=models.CASCADE
   # )
-  basket = models.ForeignKey(
-    'basket.Basket',
-    related_name='orders',
-    on_delete=models.CASCADE
-  )
   
   def __str__(self):
     return f'{self.name}'

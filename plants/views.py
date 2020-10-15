@@ -1,21 +1,36 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import Plant
-from .serializers import PlantSerializer
+from .serializers import PopulatedPlantSerializer, PlantSerializer
+
 
 class PlantListView(APIView):
-  def get(self, _request):
-    plants = Plant.objects.all()
-    serialized_plants = PlantSerializer(plants, many=True)
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
-    return Response(serialized_plants.data, status=status.HTTP_200_OK)
+    def get(self, _request):
+        plants = Plant.objects.all()
+        serialized_plants = PopulatedPlantSerializer(plants, many=True)
+        return Response(serialized_plants.data, status=status.HTTP_200_OK)
 
+class PlantDetailView(APIView):
 
-class SinglePlantView(APIView):
-  def get(self, _request, pk):
-    plant = Plant.objects.get(pk=pk)
-    serializer = PlantSerializer(plant)
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
-    return Response(serializer.data)
+    def get_plant(self, pk):
+        try:
+            return Plant.objects.get(pk=pk)
+        except Plant.DoesNotExist:
+            raise NotFound()
+
+    def is_plant_owner(self, plant, user):
+        if plant.owner.id != user.id:
+            raise PermissionDenied()
+
+    def get(self, _request, pk):
+        plant = self.get_plant(pk)
+        serialized_plant = PopulatedPlantSerializer(plant)
+        return Response(serialized_plant.data, status=status.HTTP_200_OK)
