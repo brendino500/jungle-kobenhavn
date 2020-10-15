@@ -2,11 +2,16 @@ from django.db import models
 
 # Create your models here.
 class Basket(models.Model):
-  plant = models.ForeignKey(
+  plants = models.ManyToManyField(
     'plants.plant',
     related_name='User_orders',
-    on_delete=models.CASCADE
   )
+  
+  # models.ForeignKey(
+  #   'plants.plant',
+  #   related_name='User_orders',
+  #   on_delete=models.CASCADE
+  # )
   user = models.ForeignKey(
     'jwt_auth.User',
     related_name='User_orders',
@@ -14,4 +19,4 @@ class Basket(models.Model):
   )
 
   def __str__(self):
-    return f'Basket {self.id} - Plant {self.plant}'
+    return f'Order#{self.id} - Customer: {self.user}'

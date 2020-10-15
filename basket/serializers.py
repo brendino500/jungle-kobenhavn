@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
+from plants.serializers import PlantSerializer
 from .models import Basket
 User = get_user_model()
 
@@ -18,3 +19,4 @@ class BasketSerializer(serializers.ModelSerializer):
 
 class PopulatedBasketSerializer(BasketSerializer):
     owner = UserSerializer()
+    plants = PlantSerializer(many=True)

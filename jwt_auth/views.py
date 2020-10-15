@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -48,7 +49,32 @@ class ProfileView(APIView):
 
     permission_classes = (IsAuthenticated, )
 
-    def get(self, request):
+    def get(self, request, pk):
+        user = User.objects.get(pk=pk)
+        serialized_user = PopulatedUserSerializer(user)
+        return Response(serialized_user.data)
+
+    def post(self, request, pk):
+        followed_user = User.objects.get(pk=pk)
+        followed_user.followers.add(request.user.id)
+        serialized_followed_user = PopulatedUserSerializer(followed_user)
+        return Response(serialized_followed_user.data)
+
+    def put(self, request, pk):
+        user_to_update = User.objects.get(pk=pk)
+        # self.is_user_owner(user_to_update, request.user)
+        updated_user = UserSerializer(user_to_update, data=request.data)
+        print(updated_user)
+        if updated_user.is_valid():
+            updated_user.save()
+            return Response(updated_user.data, status=status.HTTP_202_ACCEPTED)
+        return Response(updated_user.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+class OwnUserProfileView(APIView):
+
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, pk):
         user = User.objects.get(pk=request.user.id)
         serialized_user = PopulatedUserSerializer(user)
         return Response(serialized_user.data)

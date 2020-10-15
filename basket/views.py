@@ -4,13 +4,20 @@ from rest_framework import status
 from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import BasketSerializer
+from .serializers import BasketSerializer, PopulatedBasketSerializer
 from .models import Basket
+# from .models import Plant
+# from .serializers import PlantSerializer, PopulatedPlantSerializer
 
 
 class BasketListView(APIView):
 
   permission_classes = (IsAuthenticated, )
+
+  # def get(self, _request):
+  #   plants = Plants.objects.all()
+  #   serialized_plants = PopulatedPlantSerializer(plants, many=True)
+  #   return Response(serialized_plants.data, status=status.HTTP_200_OK)
 
   def post(self, request):
     request.data['owner'] = request.user.id
