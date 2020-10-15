@@ -30,7 +30,7 @@ class BasketListView(APIView):
 
 class BasketDetailView(APIView):
   
-  permossion_classes = (IsAuthenticated, )
+  permission_classes = (IsAuthenticated, )
 
   def get_basket(self, pk):
     try:

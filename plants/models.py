@@ -13,21 +13,11 @@ class Plant (models.Model):
   #   related_name='customer_order',
   #   on_delete=models.CASCADE
   # )
+  basket = models.ForeignKey(
+    'basket.Basket',
+    related_name='orders',
+    on_delete=models.CASCADE
+  )
   
   def __str__(self):
-    return self.name
-
-  def get_absolute_url(self):
-    return reverse('core:product', kwargs={
-      "pk" : self.pk
-    })
-
-  def get_add_to_basket_url(self) :
-    return reverse("core:add-to-cart", kwargs={
-      "pk" : self.pk
-    })
-
-  def get_remove_from_cart_url(self) :
-    return reverse("core:remove-from-cart", kwargs={
-      "pk" : self.pk
-    })
+    return f'{self.name}'
